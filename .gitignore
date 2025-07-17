@@ -1,0 +1,18 @@
+# Specific files
+f1_cache
+media
+
+# VS Code files
+.vscode
+
+# Ignore Python virtual environments
+.venv/
+
+# Ignore Python junk
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
