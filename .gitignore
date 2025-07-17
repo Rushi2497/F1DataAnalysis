@@ -1,6 +1,7 @@
 # Specific files
 f1_cache
 media
+notebooks/trial.ipynb
 
 # VS Code files
 .vscode
