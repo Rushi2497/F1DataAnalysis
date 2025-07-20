@@ -13,3 +13,10 @@ def get_driver_telemetry_for_laps(session, driver_abbrv, lap_range, tel_type=Non
         return temp_data.get_pos_data()
     else:
         return temp_data.get_telemetry()
+    
+def fuel_correction(session,df,iFuelLoad=108,FC_factor=0.035):
+    laps = session.total_laps
+    fuel_burn = iFuelLoad/laps      # kg/lap
+    fuel_corr = FC_factor           # s/kg
+
+    return round(df['LapTime'] - (laps - df['LapNumber']) * fuel_burn * fuel_corr, 2)
