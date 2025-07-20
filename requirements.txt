@@ -3,6 +3,7 @@ pandas
 matplotlib
 seaborn
 plotly
+statsmodels
 scikit-learn
 fastf1
 ipykernel
