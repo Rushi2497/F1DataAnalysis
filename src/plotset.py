@@ -31,7 +31,7 @@ def setup_plot():
     rcParams['figure.autolayout'] = True    
 
     # Set animation size limit
-    rcParams['animation.embed_limit'] = 50
+    rcParams['animation.embed_limit'] = 200
 
     # Enable ffmpeg
     rcParams['animation.ffmpeg_path'] = r"C:\Users\rushi\AppData\Local\ffmpeg-7.1.1-essentials_build\bin\ffmpeg.exe"
