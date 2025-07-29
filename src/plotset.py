@@ -1,21 +1,21 @@
 from matplotlib import rcParams
 from fastf1 import plotting
 
-def setup_plot():
+def setup_plot(cs='fastf1', xyticksize=16, axeslabel=18, figtitle=24, legendfont=16, legendtitle=18, grid=True):
     """
     Sets up Matplotlib rcParams with preferred styles
     and applies FastF1 color scheme.
     """
     # FastF1 default color scheme
-    plotting.setup_mpl(color_scheme='fastf1')
+    plotting.setup_mpl(color_scheme=cs)
 
     # Font sizes
-    rcParams['xtick.labelsize'] = 14
-    rcParams['ytick.labelsize'] = 14
-    rcParams['axes.labelsize'] = 16
-    rcParams['axes.titlesize'] = 24
-    rcParams['legend.fontsize'] = 14
-    rcParams['legend.title_fontsize'] = 16
+    rcParams['xtick.labelsize'] = xyticksize
+    rcParams['ytick.labelsize'] = xyticksize
+    rcParams['axes.labelsize'] = axeslabel
+    rcParams['axes.titlesize'] = figtitle
+    rcParams['legend.fontsize'] = legendfont
+    rcParams['legend.title_fontsize'] = legendtitle
 
     # Legend styling
     rcParams['legend.facecolor'] = '#000000'
@@ -25,7 +25,7 @@ def setup_plot():
     rcParams['grid.color'] = '#333333'
 
     # Optional: set grid visibility by default
-    rcParams['axes.grid'] = True
+    rcParams['axes.grid'] = grid
 
     # Auto layout to mimic tight_layout()
     rcParams['figure.autolayout'] = True    
