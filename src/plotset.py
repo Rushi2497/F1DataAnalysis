@@ -13,6 +13,7 @@ def setup_plot(cs='fastf1', xyticksize=16, axeslabel=18, figtitle=24, legendfont
     rcParams['xtick.labelsize'] = xyticksize
     rcParams['ytick.labelsize'] = xyticksize
     rcParams['axes.labelsize'] = axeslabel
+    rcParams['axes.labelweight'] = 'bold'
     rcParams['axes.titlesize'] = figtitle
     rcParams['legend.fontsize'] = legendfont
     rcParams['legend.title_fontsize'] = legendtitle
