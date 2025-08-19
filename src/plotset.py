@@ -1,7 +1,7 @@
 from matplotlib import rcParams
 from fastf1 import plotting
 
-def setup_plot(cs='fastf1', xyticksize=16, axeslabel=18, figtitle=24, legendfont=16, legendtitle=18, grid=True):
+def setup_plot(cs='fastf1', xyticksize=18, axeslabel=20, figtitle=24, legendfont=18, legendtitle=20, grid=True):
     """
     Sets up Matplotlib rcParams with preferred styles
     and applies FastF1 color scheme.
