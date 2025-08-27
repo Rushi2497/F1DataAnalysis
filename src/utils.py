@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
     
+
 def fuel_correction(session,df,iFuelLoad=108,FC_factor=0.035):
 
     """
@@ -31,6 +32,7 @@ def fuel_correction(session,df,iFuelLoad=108,FC_factor=0.035):
     fuel_corr = FC_factor           # s/kg
 
     return round(df['LapTime'] - (laps - df['LapNumber']) * fuel_burn * fuel_corr, 2)
+
 
 def get_acc_time(df,target_speed):
     
@@ -63,6 +65,7 @@ def get_acc_time(df,target_speed):
     acc_time = t_target    #- df.iloc[df[df.Distance > 0].index[0] - 1].Time, use if you want to exclude reaction time
 
     return round(acc_time,2)
+
 
 def get_acc_df(session):
 
@@ -99,6 +102,7 @@ def get_acc_df(session):
             driver_dict[session.get_driver(driver).Abbreviation] = [np.nan,np.nan]
     
     return pd.DataFrame(driver_dict).T.set_axis(labels=['0-100','100-200'],axis=1)
+
 
 def get_driver_stint_models(session, drivers, iFuelLoad=108, FC_factor=0.035):
     """
@@ -162,3 +166,60 @@ def get_driver_stint_models(session, drivers, iFuelLoad=108, FC_factor=0.035):
             results[drv_abbr] = stint_models
 
     return results
+
+
+def compare_car_speeds(session, drivers, corner_inputs, delta=10):
+    """
+    Compare car performance in terms of Top Speed, High-Speed Corner Avg,
+    and Low-Speed Corner Avg using FastF1 telemetry data.
+
+    Parameters
+    ----------
+    session : fastf1.core.Session
+        A FastF1 session object (already loaded).
+    drivers : list[str]
+        List of driver abbreviations, e.g., ["VER", "HAM", "NOR"].
+    corner_inputs : dict
+        Dictionary specifying corner categories:
+        {
+            "high": [list of high-speed corner numbers],
+            "low": [list of low-speed corner numbers],
+            "medium": [list of medium-speed corners]),
+            "optional": any additional category list
+        }
+    delta : float, optional
+        Distance window (in meters) around each corner marker to average
+        speeds. Default = 10m.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame indexed by driver abbreviations with columns:
+        ["TopSpeed", "HighSpeedAvg", "LowSpeedAvg", MediumSpeedAvg]
+    """
+    corner_df = session.get_circuit_info().corners
+    results = {}
+
+    for drv in drivers:
+        tel = session.laps.pick_drivers(drv).pick_fastest().get_telemetry()
+        metrics = {}
+
+        # --- Top Speed (track max) ---
+        metrics["TopSpeed"] = tel.Speed.max()
+
+        # --- Loop through corner categories (high/low/medium etc.) ---
+        for category, corners in corner_inputs.items():
+            speeds = []
+            for c in corners:
+                d = corner_df.iloc[c-1].Distance
+                mask = (tel.Distance > d - delta) & (tel.Distance < d + delta)
+                speeds.extend(tel[mask].Speed.tolist())
+            # store category average
+            if speeds:
+                metrics[f"{category.capitalize()}SpeedAvg"] = sum(speeds) / len(speeds)
+            else:
+                metrics[f"{category.capitalize()}SpeedAvg"] = None
+
+        results[drv] = metrics
+
+    return round(pd.DataFrame(results).T)
