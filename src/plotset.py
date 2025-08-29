@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+from matplotlib.collections import LineCollection
 from matplotlib import rcParams
 from fastf1 import plotting
 import os
@@ -110,3 +112,40 @@ def save_fig(fig, name, loc, dpi=300):
     except Exception as e:
         print(f"Error saving figure: {e}")
     return
+
+def plot_track_dominance(points, segments, colors, figsize=(12, 10), linewidth=16):
+    """
+    Plot track dominance visualization from computed points, segments, and colors.
+
+    Parameters
+    ----------
+    points : np.ndarray
+        Array of (x, y) coordinates reshaped for LineCollection plotting.
+    segments : np.ndarray
+        Array of line segments for LineCollection.
+    colors : np.ndarray
+        Array of colors corresponding to which driver is fastest at each point.
+    figsize : tuple, optional
+        Figure size in inches (default: (12, 10)).
+    linewidth : int or float, optional
+        Line width for the track segments (default: 16).
+
+    Returns
+    -------
+    fig : matplotlib.figure.Figure
+        The created matplotlib Figure object.
+    """
+    fig, ax = plt.subplots(figsize=figsize)
+    fig.set_facecolor("#000000")
+    ax.axis("off")
+
+    # Match segments length (N-1) with colors
+    lc = LineCollection(segments, colors=colors[:-1], linewidth=linewidth)
+
+    ax.add_collection(lc)
+    ax.autoscale()
+
+    plt.tight_layout()
+    plt.show()
+
+    return fig
