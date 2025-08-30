@@ -307,3 +307,32 @@ def compute_track_dominance_multi(session, drivers, circuit_length, window_size=
     segments = np.concatenate([points[:-1], points[1:]], axis=1)
 
     return points, segments, colors
+
+
+def quali_track_evolution(session):
+    """
+    Extracts the qualifying lap times (Q1, Q2, Q3) of the top 10 drivers 
+    from a given qualifying session and converts them into seconds.  
+
+    Parameters
+    ----------
+    session : fastf1.core.Session
+        A loaded qualifying session object from FastF1 containing laps and results data.  
+
+    Returns
+    -------
+    pandas.DataFrame
+        A DataFrame containing the top 10 drivers' Q1, Q2, and Q3 lap times in seconds.
+        Columns:
+            - 'Q1': float, Q1 lap time in seconds
+            - 'Q2': float, Q2 lap time in seconds
+            - 'Q3': float, Q3 lap time in seconds
+    """
+    q1, q2, q3 = session.laps.split_qualifying_sessions()
+    
+    df = session.results.iloc[:10][['Q1','Q2','Q3']].copy()
+    df['Q1'] = df['Q1'].dt.total_seconds()
+    df['Q2'] = df['Q2'].dt.total_seconds()
+    df['Q3'] = df['Q3'].dt.total_seconds()
+
+    return df

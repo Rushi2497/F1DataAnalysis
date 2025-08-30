@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib import rcParams
+import seaborn as sns
 from fastf1 import plotting
 import os
 
@@ -148,4 +149,56 @@ def plot_track_dominance(points, segments, colors, figsize=(12, 10), linewidth=1
     plt.tight_layout()
     plt.show()
 
+    return fig
+
+
+def plot_quali_track_evolution(df, figsize=(15,8), ylim=None):
+    """
+    Plots a violin plot with swarm overlay for qualifying lap times (Q1, Q2, Q3)
+    of the top 10 drivers.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame containing columns 'Q1', 'Q2', and 'Q3' with lap times in seconds
+        for the top 10 drivers.
+    figsize : tuple, optional
+        Figure size (width, height) in inches. Default is (15, 8).
+    ylim : tuple, optional
+        y-axis limits as (ymin, ymax). If None, limits are auto-scaled.
+
+    Returns
+    -------
+    matplotlib.figure.Figure
+        The generated matplotlib Figure object.
+    """
+    fig, ax = plt.subplots(figsize=figsize)
+    
+    # Violin plot (distribution of lap times)
+    sns.violinplot(
+        data=df,
+        inner=None,
+        palette='Set1',
+        width=0.5,
+        ax=ax
+    )
+    
+    # Swarm plot (individual lap times)
+    sns.swarmplot(
+        data=df,
+        size=20,
+        linewidth=3,
+        edgecolor='k',
+        palette='Set1',
+        ax=ax
+    )
+    
+    ax.set_title('(Top 10) Lap Time Evolution: Q1 → Q3')
+    ax.set_ylabel('Lap Times (sec)')
+    
+    ax.hlines(y=[df.Q1.mean(),df.Q2.mean(),df.Q3.mean()],xmin=[-0.5,0.5,1.5],xmax=[0.5,1.5,2.5],colors='w',linestyles='--',linewidth=4)
+
+    if ylim is not None:
+        ax.set_ylim(ylim)
+    
     return fig
