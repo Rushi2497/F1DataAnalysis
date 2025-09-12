@@ -79,7 +79,7 @@ def setup_plot(cs='fastf1', xyticksize=18, axeslabel=20, figtitle=24, legendfont
     print("Matplotlib rcParams initialized with custom style.")
 
 
-def save_fig(fig, name, loc, dpi=300):
+def save_fig(fig, name, loc, trs=True, dpi=300):
     """
     Save a matplotlib figure as a PNG file in a specified directory.
 
@@ -92,6 +92,9 @@ def save_fig(fig, name, loc, dpi=300):
     loc : str
         Subdirectory inside ./media/ where the figure will be stored.
         If the directory does not exist, it will be created automatically.
+    trs : bool
+        Whether to save the figure with or without background.
+        Default is True, no background.
     dpi : int, optional
         Resolution of the saved figure in dots per inch (default is 300).
 
@@ -108,7 +111,7 @@ def save_fig(fig, name, loc, dpi=300):
     os.makedirs(dir_path, exist_ok=True)
     
     try:
-        fig.savefig(full_path, dpi=dpi, bbox_inches='tight')
+        fig.savefig(full_path, transparent=trs, dpi=dpi, bbox_inches='tight')
         print(f"Figure saved at {full_path}")
     except Exception as e:
         print(f"Error saving figure: {e}")
