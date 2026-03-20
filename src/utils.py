@@ -95,7 +95,7 @@ def get_acc_df(session):
     drivers = session.drivers
     driver_dict = {}
     for driver in drivers:
-        df = session.laps.pick_laps(1).pick_drivers(driver).get_car_data()[['Time','Speed']].add_distance()
+        df = session.laps.pick_laps(1).pick_drivers(driver).get_car_data(interpolate_edges=True)[['Time','Speed']].add_distance()
         df['Time'] = df['Time'].dt.total_seconds()
         try:
             driver_dict[session.get_driver(driver).Abbreviation] = [get_acc_time(df,100),round(get_acc_time(df,200)-get_acc_time(df,100),2)]
